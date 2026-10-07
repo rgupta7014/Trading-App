@@ -68,6 +68,15 @@ class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
   @override
   Widget build(BuildContext context) {
     final rawHoldings = ref.watch(holdingsListProvider);
+
+    // If sorted by dynamic metrics (P&L or Current Value), subscribe to held stock quotes
+    // so that rows automatically reorder as prices move
+    if (_sortType != HoldingSortType.symbol) {
+      for (final h in rawHoldings) {
+        ref.watch(stockQuoteFamily(h.symbol));
+      }
+    }
+
     final sortedHoldings = _sortHoldings(rawHoldings, ref);
 
     return Scaffold(
