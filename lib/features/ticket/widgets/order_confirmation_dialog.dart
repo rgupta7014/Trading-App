@@ -4,7 +4,6 @@ import 'package:trading_app/core/theme/app_theme.dart';
 import 'package:trading_app/core/utils/currency_formatter.dart';
 import 'package:trading_app/domain/models/order_model.dart';
 
-/// Modal dialog showing the order execution confirmation details.
 class OrderConfirmationDialog extends StatelessWidget {
   final OrderModel order;
   final VoidCallback? onViewHoldings;
@@ -47,7 +46,6 @@ class OrderConfirmationDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Success icon
             Container(
               width: 64,
               height: 64,
@@ -72,7 +70,6 @@ class OrderConfirmationDialog extends StatelessWidget {
               style: const TextStyle(fontSize: 13, color: AppColors.darkTextSecondary),
             ),
             const SizedBox(height: 20),
-            // Order Receipt Card
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -114,7 +111,6 @@ class OrderConfirmationDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            // Action Buttons
             Row(
               children: [
                 Expanded(

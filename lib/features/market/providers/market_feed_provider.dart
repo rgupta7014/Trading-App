@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trading_app/data/mock_market_feed_service.dart';
 import 'package:trading_app/domain/models/stock_quote.dart';
 
-/// Singleton mock market feed service.
 final marketFeedServiceProvider = Provider<MockMarketFeedService>((ref) {
   final service = MockMarketFeedService();
   service.start();
@@ -13,7 +12,6 @@ final marketFeedServiceProvider = Provider<MockMarketFeedService>((ref) {
   return service;
 });
 
-/// Current tick rate controller provider.
 final tickRateProvider = StateNotifierProvider<TickRateNotifier, double>((ref) {
   final service = ref.watch(marketFeedServiceProvider);
   return TickRateNotifier(service);
@@ -38,16 +36,11 @@ class TickRateNotifier extends StateNotifier<double> {
   }
 }
 
-/// Provider for ticker active status.
 final isTickerRunningProvider = Provider<bool>((ref) {
   final service = ref.watch(marketFeedServiceProvider);
   return service.isRunning;
 });
 
-/// Granular stock quote provider for an individual symbol.
-///
-/// Guaranteed zero-flicker synchronous start with instant reactive stream updates.
-/// Only widgets subscribed to this specific symbol rebuild when its price ticks.
 final stockQuoteFamily =
     StateNotifierProvider.autoDispose.family<StockQuoteNotifier, StockQuote, String>(
   (ref, symbol) {

@@ -5,7 +5,6 @@ import 'package:trading_app/domain/models/holding_model.dart';
 import 'package:trading_app/domain/models/order_model.dart';
 import 'package:trading_app/domain/models/watchlist_model.dart';
 
-/// Storage service with resilient fallback against corrupted local storage.
 class LocalStorageService {
   final SharedPreferences _prefs;
 
@@ -16,13 +15,11 @@ class LocalStorageService {
   static const String _keyHoldings = 'holdings';
   static const String _keyWatchlists = 'watchlists';
 
-  // --- Wallet Balance ---
   int getWalletBalance() {
     try {
       final val = _prefs.getInt(_keyWallet);
       return val ?? AppConstants.initialWalletBalancePaise;
     } catch (e) {
-      // Corrupt storage fallback
       return AppConstants.initialWalletBalancePaise;
     }
   }
@@ -31,7 +28,6 @@ class LocalStorageService {
     await _prefs.setInt(_keyWallet, paise);
   }
 
-  // --- Orders ---
   List<OrderModel> getOrders() {
     try {
       final raw = _prefs.getStringList(_keyOrders);
@@ -50,7 +46,6 @@ class LocalStorageService {
     await _prefs.setStringList(_keyOrders, list);
   }
 
-  // --- Holdings ---
   List<HoldingModel> getHoldings() {
     try {
       final raw = _prefs.getStringList(_keyHoldings);
@@ -69,7 +64,6 @@ class LocalStorageService {
     await _prefs.setStringList(_keyHoldings, list);
   }
 
-  // --- Watchlists ---
   List<Watchlist> getWatchlists() {
     try {
       final raw = _prefs.getStringList(_keyWatchlists);

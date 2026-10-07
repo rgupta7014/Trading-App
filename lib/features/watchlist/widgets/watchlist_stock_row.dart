@@ -4,9 +4,6 @@ import 'package:trading_app/core/theme/app_theme.dart';
 import 'package:trading_app/features/market/providers/market_feed_provider.dart';
 import 'package:trading_app/features/market/widgets/stock_flash_cell.dart';
 
-/// Reorderable and dismissible stock row for a watchlist.
-///
-/// MUST listen strictly to its own symbol quote for granular updates.
 class WatchlistStockRow extends ConsumerWidget {
   final String symbol;
   final int index;
@@ -39,7 +36,6 @@ class WatchlistStockRow extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
-              // Drag Handle
               ReorderableDragStartListener(
                 index: index,
                 child: const Padding(
@@ -51,7 +47,6 @@ class WatchlistStockRow extends ConsumerWidget {
                   ),
                 ),
               ),
-              // Symbol Info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,10 +74,8 @@ class WatchlistStockRow extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              // Live Price Cell with Green/Red Flash
               StockFlashCell(quote: quote),
               const SizedBox(width: 4),
-              // Remove button
               IconButton(
                 icon: const Icon(Icons.close_rounded, size: 18),
                 color: AppColors.darkTextMuted,

@@ -34,16 +34,13 @@ void main() {
       expect(updatedQuote.symbol, equals('RELIANCE'));
       expect(updatedQuote.currentPricePaise, isNot(equals(0)));
 
-      // Check price moved and direction was set
       if (updatedQuote.currentPricePaise > initialQuote.currentPricePaise) {
         expect(updatedQuote.lastTickDirection, equals(PriceDirection.up));
       } else {
         expect(updatedQuote.lastTickDirection, equals(PriceDirection.down));
       }
 
-      // Percentage change per tick should be small (~0.1% range)
       final diff = (updatedQuote.currentPricePaise - initialQuote.currentPricePaise).abs();
-      // RELIANCE is 295000 paise. 0.1% is 295 paise. Guarantee reasonable bound
       expect(diff, lessThanOrEqualTo(500));
     });
 
@@ -71,9 +68,9 @@ void main() {
       final events = <StockQuote>[];
       final sub = feed.streamForSymbol('INFY').listen(events.add);
 
-      feed.tickStock('RELIANCE'); // should not emit to INFY
-      feed.tickStock('INFY');     // should emit
-      feed.tickStock('ITC');      // should not emit
+      feed.tickStock('RELIANCE');
+      feed.tickStock('INFY');
+      feed.tickStock('ITC');
 
       await pumpEventQueue();
       expect(events.length, equals(1));

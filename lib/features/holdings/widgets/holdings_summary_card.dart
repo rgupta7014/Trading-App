@@ -5,9 +5,6 @@ import 'package:trading_app/core/utils/currency_formatter.dart';
 import 'package:trading_app/features/market/providers/market_feed_provider.dart';
 import 'package:trading_app/features/ticket/providers/portfolio_provider.dart';
 
-/// Top aggregate summary card showing total invested, current market value, and total P&L.
-///
-/// Guaranteed to equal the exact sum of individual holding rows at any moment.
 class HoldingsSummaryCard extends ConsumerWidget {
   const HoldingsSummaryCard({super.key});
 
@@ -17,7 +14,6 @@ class HoldingsSummaryCard extends ConsumerWidget {
     final walletCash = ref.watch(walletBalanceProvider);
     final feedService = ref.watch(marketFeedServiceProvider);
 
-    // Watch live ticks for all held stocks to maintain exact sum
     for (final h in holdings) {
       ref.watch(stockQuoteFamily(h.symbol));
     }
@@ -64,7 +60,6 @@ class HoldingsSummaryCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Total Portfolio Value
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -105,7 +100,6 @@ class HoldingsSummaryCard extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // Total P&L Banner
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
@@ -141,7 +135,6 @@ class HoldingsSummaryCard extends ConsumerWidget {
           const SizedBox(height: 16),
           const Divider(height: 1, thickness: 0.8, color: AppColors.darkCardBorder),
           const SizedBox(height: 14),
-          // Bottom details: Total Invested & Available Cash
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -4,7 +4,6 @@ import 'package:trading_app/core/constants/stock_constants.dart';
 import 'package:trading_app/core/theme/app_theme.dart';
 import 'package:trading_app/features/watchlist/providers/watchlist_provider.dart';
 
-/// Modal sheet to pick and add stocks to the current watchlist from the 10 stocks.
 class StockPickerSheet extends ConsumerStatefulWidget {
   final String watchlistId;
 
@@ -59,7 +58,6 @@ class _StockPickerSheetState extends ConsumerState<StockPickerSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Drag handle
           Center(
             child: Container(
               width: 36,
@@ -89,7 +87,6 @@ class _StockPickerSheetState extends ConsumerState<StockPickerSheet> {
             ],
           ),
           const SizedBox(height: 12),
-          // Search input
           TextField(
             decoration: const InputDecoration(
               hintText: 'Search 10 stocks by name or symbol...',

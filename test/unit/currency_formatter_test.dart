@@ -5,19 +5,16 @@ import 'package:decimal/decimal.dart';
 void main() {
   group('CurrencyFormatter tests', () {
     test('formats paise to Indian Rupee notation correctly', () {
-      // 10 Lakhs (1,000,000 Rs = 100,000,000 paise)
       expect(
         CurrencyFormatter.formatPaise(100000000),
         equals('₹10,00,000.00'),
       );
 
-      // Example from doc: ₹1,23,456.78
       expect(
         CurrencyFormatter.formatPaise(12345678),
         equals('₹1,23,456.78'),
       );
 
-      // Small amounts
       expect(
         CurrencyFormatter.formatPaise(50),
         equals('₹0.50'),
@@ -27,13 +24,11 @@ void main() {
         equals('₹1.05'),
       );
 
-      // Single Rupee
       expect(
         CurrencyFormatter.formatPaise(100),
         equals('₹1.00'),
       );
 
-      // Negative amounts
       expect(
         CurrencyFormatter.formatPaise(-25050),
         equals('-₹250.50'),
@@ -67,7 +62,6 @@ void main() {
       );
 
       final dec2 = Decimal.parse('123456.789');
-      // Rounds 789 to 79
       expect(
         CurrencyFormatter.formatDecimalRupees(dec2),
         equals('₹1,23,456.79'),

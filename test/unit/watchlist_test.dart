@@ -27,7 +27,6 @@ void main() {
       expect(notifier.state.last.name, equals('Tech Focus'));
       expect(notifier.state.last.symbols, isEmpty);
 
-      // Verify persistence in storage
       final saved = storage.getWatchlists();
       expect(saved.any((w) => w.name == 'Tech Focus'), isTrue);
     });
@@ -44,7 +43,7 @@ void main() {
     test('adds stocks to a watchlist without duplicates', () {
       final id = notifier.state.first.id;
       notifier.addStock(id, 'RELIANCE');
-      notifier.addStock(id, 'RELIANCE'); // duplicate attempt
+      notifier.addStock(id, 'RELIANCE');
 
       final watchlist = notifier.state.firstWhere((w) => w.id == id);
       expect(watchlist.symbols.where((s) => s == 'RELIANCE').length, equals(1));
@@ -67,7 +66,6 @@ void main() {
       notifier.addStock(target.id, 'TCS');
       notifier.addStock(target.id, 'INFY');
 
-      // Reorder INFY (index 2) to top (index 0)
       notifier.reorderStocks(target.id, 2, 0);
 
       final updated = notifier.state.firstWhere((w) => w.id == target.id);
@@ -80,7 +78,6 @@ void main() {
       }
       expect(notifier.state.length, equals(1));
 
-      // Attempt to delete the final watchlist
       notifier.deleteWatchlist(notifier.state.first.id);
       expect(notifier.state.length, equals(1));
     });

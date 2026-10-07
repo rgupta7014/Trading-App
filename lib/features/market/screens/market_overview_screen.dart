@@ -6,7 +6,6 @@ import 'package:trading_app/features/market/providers/market_feed_provider.dart'
 import 'package:trading_app/features/market/widgets/market_stock_row.dart';
 import 'package:trading_app/features/market/widgets/tick_rate_control_sheet.dart';
 
-/// Screen displaying the live market overview for all 10 stocks.
 class MarketOverviewScreen extends ConsumerWidget {
   final Function(String symbol)? onStockSelected;
 
@@ -30,7 +29,6 @@ class MarketOverviewScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          // Feed speed indicator / quick launcher
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: ActionChip(
@@ -52,7 +50,6 @@ class MarketOverviewScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          // Top Market Info Banner
           Container(
             margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
             padding: const EdgeInsets.all(14),
@@ -107,7 +104,6 @@ class MarketOverviewScreen extends ConsumerWidget {
               ],
             ),
           ),
-          // Stock List with strictly isolated row listeners
           Expanded(
             child: ListView.separated(
               itemCount: AppConstants.stocks.length,
@@ -118,7 +114,6 @@ class MarketOverviewScreen extends ConsumerWidget {
               ),
               itemBuilder: (context, index) {
                 final symbol = AppConstants.stocks[index].symbol;
-                // Keyed by ValueKey(symbol) for optimal Flutter diffing
                 return MarketStockRow(
                   key: ValueKey(symbol),
                   symbol: symbol,

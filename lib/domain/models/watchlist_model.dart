@@ -1,6 +1,5 @@
 import 'package:uuid/uuid.dart';
 
-/// Represents a user-customizable list of stock symbols.
 class Watchlist {
   final String id;
   final String name;

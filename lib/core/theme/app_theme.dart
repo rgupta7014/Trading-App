@@ -3,34 +3,30 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Primary brand palette
-  static const Color primary = Color(0xFF6366F1); // Indigo accent
+  static const Color primary = Color(0xFF6366F1);
   static const Color primaryDark = Color(0xFF4F46E5);
-  static const Color accent = Color(0xFF38BDF8); // Cyan highlight
+  static const Color accent = Color(0xFF38BDF8);
 
-  // Trading status colors
-  static const Color bullish = Color(0xFF00C087); // Emerald green
+  static const Color bullish = Color(0xFF00C087);
   static const Color bullishLight = Color(0xFF10B981);
   static const Color bullishBackground = Color(0x1F00C087);
   static const Color bullishFlash = Color(0x4000C087);
 
-  static const Color bearish = Color(0xFFF43F5E); // Rose/Crimson red
+  static const Color bearish = Color(0xFFF43F5E);
   static const Color bearishLight = Color(0xFFFB7185);
   static const Color bearishBackground = Color(0x1FF43F5E);
   static const Color bearishFlash = Color(0x40F43F5E);
 
-  static const Color neutral = Color(0xFF94A3B8); // Slate 400
+  static const Color neutral = Color(0xFF94A3B8);
 
-  // Dark Theme surfaces
-  static const Color darkBackground = Color(0xFF0B0F19); // Deep dark
-  static const Color darkCard = Color(0xFF131B2E); // Elevated card
+  static const Color darkBackground = Color(0xFF0B0F19);
+  static const Color darkCard = Color(0xFF131B2E);
   static const Color darkCardHover = Color(0xFF1B2640);
   static const Color darkCardBorder = Color(0xFF22304C);
   static const Color darkTextPrimary = Color(0xFFF8FAFC);
   static const Color darkTextSecondary = Color(0xFF94A3B8);
   static const Color darkTextMuted = Color(0xFF64748B);
 
-  // Light Theme surfaces
   static const Color lightBackground = Color(0xFFF8FAFC);
   static const Color lightCard = Color(0xFFFFFFFF);
   static const Color lightCardBorder = Color(0xFFE2E8F0);

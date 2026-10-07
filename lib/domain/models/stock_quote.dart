@@ -1,8 +1,5 @@
 enum PriceDirection { up, down, none }
 
-/// Represents a real-time price quote for a single stock.
-///
-/// All monetary values are strictly stored in integer paise.
 class StockQuote {
   final String symbol;
   final String name;
@@ -22,10 +19,8 @@ class StockQuote {
     required this.lastUpdated,
   });
 
-  /// Absolute price difference in integer paise from the previous close.
   int get changePaise => currentPricePaise - basePricePaise;
 
-  /// Percentage change relative to the previous close.
   double get changePercent {
     if (basePricePaise == 0) return 0.0;
     return (changePaise / basePricePaise) * 100;

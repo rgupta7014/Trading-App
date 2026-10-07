@@ -13,7 +13,6 @@ import 'package:trading_app/features/watchlist/screens/watchlist_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Set system UI style for immersive dark theme
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -23,7 +22,6 @@ Future<void> main() async {
     ),
   );
 
-  // Initialize SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
 
   runApp(
@@ -66,45 +64,45 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     setState(() {
       _selectedStockForTicket = symbol;
       _selectedSideForTicket = side;
-      _currentIndex = 2; // Trade ticket tab
+      _currentIndex = 2; 
     });
   }
 
   void _navigateToHoldings() {
     setState(() {
-      _currentIndex = 3; // Holdings tab
+      _currentIndex = 3; 
     });
   }
 
   void _navigateToMarket() {
     setState(() {
-      _currentIndex = 1; // Market overview tab
+      _currentIndex = 1; 
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // IndexedStack preserves screen state across navigation tabs
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          // 0: Watchlists
+         
           WatchlistScreen(
             onStockSelected: (sym) => _openTicket(sym),
           ),
-          // 1: Live Market Overview
+         
           MarketOverviewScreen(
             onStockSelected: (sym) => _openTicket(sym),
           ),
-          // 2: Buy/Sell Ticket
+
           BuySellTicketScreen(
             key: ValueKey('$_selectedStockForTicket-$_selectedSideForTicket'),
             initialSymbol: _selectedStockForTicket,
             initialSide: _selectedSideForTicket,
             onNavigateToHoldings: _navigateToHoldings,
           ),
-          // 3: Holdings Portfolio
+         
           HoldingsScreen(
             onStockSelected: (sym) => _openTicket(sym),
             onExploreMarket: _navigateToMarket,

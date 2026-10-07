@@ -3,7 +3,6 @@ import 'package:trading_app/core/theme/app_theme.dart';
 import 'package:trading_app/core/utils/currency_formatter.dart';
 import 'package:trading_app/domain/models/stock_quote.dart';
 
-/// Clean stock price cell without distracting background flash boxes.
 class StockFlashCell extends StatelessWidget {
   final StockQuote quote;
   final bool compact;

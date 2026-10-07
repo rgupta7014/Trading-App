@@ -5,10 +5,9 @@ import 'package:trading_app/data/local_storage_service.dart';
 import 'package:trading_app/domain/models/holding_model.dart';
 import 'package:trading_app/domain/models/order_model.dart';
 
-/// Combined portfolio state containing wallet balance, holdings, and order history.
 class PortfolioState {
   final int walletBalancePaise;
-  final Map<String, HoldingModel> holdings; // Keyed by symbol
+  final Map<String, HoldingModel> holdings;
   final List<OrderModel> orders;
 
   const PortfolioState({
@@ -62,12 +61,10 @@ class PortfolioNotifier extends StateNotifier<PortfolioState> {
     _storage.saveOrders(state.orders);
   }
 
-  /// Returns the number of shares currently held for a symbol.
   int getQuantityHeld(String symbol) {
     return state.holdings[symbol]?.quantity ?? 0;
   }
 
-  /// Executes a market BUY or SELL order at the exact submit-time LTP.
   OrderExecutionResult executeOrder({
     required String symbol,
     required OrderSide side,
@@ -84,7 +81,6 @@ class PortfolioNotifier extends StateNotifier<PortfolioState> {
     final int totalOrderValuePaise = quantity * submitLtpPaise;
 
     if (side == OrderSide.buy) {
-      // Validate available balance
       if (totalOrderValuePaise > state.walletBalancePaise) {
         return OrderExecutionResult.failure(
           'Insufficient wallet balance. Required: ₹${(totalOrderValuePaise / 100).toStringAsFixed(2)}, Available: ₹${(state.walletBalancePaise / 100).toStringAsFixed(2)}',
@@ -121,7 +117,6 @@ class PortfolioNotifier extends StateNotifier<PortfolioState> {
       _persist();
       return OrderExecutionResult.success(order);
     } else {
-      // SELL order
       final existingHolding = state.holdings[symbol];
       final int currentlyHeld = existingHolding?.quantity ?? 0;
 
@@ -139,7 +134,6 @@ class PortfolioNotifier extends StateNotifier<PortfolioState> {
 
       final updatedHolding = existingHolding!.withSell(sellQty: quantity);
       if (updatedHolding == null) {
-        // Holding completely closed
         newHoldings.remove(symbol);
       } else {
         newHoldings[symbol] = updatedHolding;
@@ -163,7 +157,6 @@ class PortfolioNotifier extends StateNotifier<PortfolioState> {
     }
   }
 
-  /// Resets the wallet balance back to initial ₹10,00,000 (useful for testing or demo reset).
   void resetWallet() {
     state = state.copyWith(
       walletBalancePaise: AppConstants.initialWalletBalancePaise,
@@ -180,7 +173,6 @@ final portfolioProvider =
   return PortfolioNotifier(storage);
 });
 
-/// Individual selectors to minimize unnecessary widget rebuilds:
 final walletBalanceProvider = Provider<int>((ref) {
   return ref.watch(portfolioProvider).walletBalancePaise;
 });

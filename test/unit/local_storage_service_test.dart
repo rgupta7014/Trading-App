@@ -20,7 +20,7 @@ void main() {
     });
 
     test('persists and retrieves wallet balance accurately', () async {
-      await storage.saveWalletBalance(85000000); // 8.5 Lakhs
+      await storage.saveWalletBalance(85000000);
       expect(storage.getWalletBalance(), equals(85000000));
     });
 
@@ -55,7 +55,6 @@ void main() {
     });
 
     test('handles corrupt storage gracefully without throwing', () async {
-      // Intentionally insert corrupted JSON data in preferences
       SharedPreferences.setMockInitialValues({
         'order_history': ['{invalid_json_content}'],
         'holdings': ['{broken_holding:'],
@@ -64,10 +63,9 @@ void main() {
       final prefs = await SharedPreferences.getInstance();
       final corruptStorage = LocalStorageService(prefs);
 
-      // Should not throw, but safely return empty or default fallbacks
       expect(corruptStorage.getOrders(), isEmpty);
       expect(corruptStorage.getHoldings(), isEmpty);
-      expect(corruptStorage.getWatchlists(), isNotEmpty); // Returns default watchlists!
+      expect(corruptStorage.getWatchlists(), isNotEmpty);
     });
   });
 }

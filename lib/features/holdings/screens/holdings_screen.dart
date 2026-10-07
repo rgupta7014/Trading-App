@@ -10,7 +10,6 @@ import 'package:trading_app/features/ticket/providers/portfolio_provider.dart';
 enum HoldingSortType { pnl, symbol, currentValue }
 enum SortOrder { ascending, descending }
 
-/// Holdings Portfolio Screen with live P&L, sorting, aggregate summary, and empty state.
 class HoldingsScreen extends ConsumerStatefulWidget {
   final Function(String symbol)? onStockSelected;
   final VoidCallback? onExploreMarket;
@@ -26,7 +25,6 @@ class HoldingsScreen extends ConsumerStatefulWidget {
 }
 
 class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
-  // Default sorting: P&L descending (as requested in assignment doc)
   HoldingSortType _sortType = HoldingSortType.pnl;
   SortOrder _sortOrder = SortOrder.descending;
 
@@ -69,8 +67,6 @@ class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
   Widget build(BuildContext context) {
     final rawHoldings = ref.watch(holdingsListProvider);
 
-    // If sorted by dynamic metrics (P&L or Current Value), subscribe to held stock quotes
-    // so that rows automatically reorder as prices move
     if (_sortType != HoldingSortType.symbol) {
       for (final h in rawHoldings) {
         ref.watch(stockQuoteFamily(h.symbol));
@@ -93,10 +89,7 @@ class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
           ? _buildEmptyState(context)
           : Column(
               children: [
-                // Top Aggregate Summary
                 const HoldingsSummaryCard(),
-
-                // Filter & Sort Bar
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
@@ -111,7 +104,6 @@ class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
                         ),
                       ),
                       const Spacer(),
-                      // Sort Type Selector Menu
                       PopupMenuButton<HoldingSortType>(
                         initialValue: _sortType,
                         color: AppColors.darkCard,
@@ -150,7 +142,6 @@ class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
                         ],
                       ),
                       const SizedBox(width: 8),
-                      // Direction Toggle (Ascending / Descending)
                       IconButton.filledTonal(
                         onPressed: () {
                           setState(() {
@@ -180,14 +171,11 @@ class _HoldingsScreenState extends ConsumerState<HoldingsScreen> {
                   ),
                 ),
                 const Divider(height: 1, thickness: 0.8, color: AppColors.darkCardBorder),
-
-                // Holdings List
                 Expanded(
                   child: ListView.builder(
                     itemCount: sortedHoldings.length,
                     itemBuilder: (context, index) {
                       final holding = sortedHoldings[index];
-                      // ValueKey(holding.symbol) ensures proper identification
                       return HoldingStockRow(
                         key: ValueKey(holding.symbol),
                         holding: holding,

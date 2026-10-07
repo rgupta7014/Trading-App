@@ -3,7 +3,6 @@ import 'package:trading_app/data/local_storage_provider.dart';
 import 'package:trading_app/data/local_storage_service.dart';
 import 'package:trading_app/domain/models/watchlist_model.dart';
 
-/// Notifier managing user watchlists, persisting to local storage.
 class WatchlistNotifier extends StateNotifier<List<Watchlist>> {
   final LocalStorageService _storage;
 
@@ -13,7 +12,6 @@ class WatchlistNotifier extends StateNotifier<List<Watchlist>> {
     _storage.saveWatchlists(state);
   }
 
-  /// Creates a new watchlist and appends it.
   void createWatchlist(String name) {
     if (name.trim().isEmpty) return;
     final newWatchlist = Watchlist(
@@ -24,7 +22,6 @@ class WatchlistNotifier extends StateNotifier<List<Watchlist>> {
     _persist();
   }
 
-  /// Renames an existing watchlist.
   void renameWatchlist(String id, String newName) {
     if (newName.trim().isEmpty) return;
     state = [
@@ -34,10 +31,8 @@ class WatchlistNotifier extends StateNotifier<List<Watchlist>> {
     _persist();
   }
 
-  /// Deletes a watchlist.
   void deleteWatchlist(String id) {
     if (state.length <= 1) {
-      // Keep at least one default watchlist
       state = [
         Watchlist(name: 'My Watchlist', symbols: []),
       ];
@@ -47,7 +42,6 @@ class WatchlistNotifier extends StateNotifier<List<Watchlist>> {
     _persist();
   }
 
-  /// Adds a stock symbol to the target watchlist if not already present.
   void addStock(String id, String symbol) {
     state = [
       for (final w in state)
@@ -61,7 +55,6 @@ class WatchlistNotifier extends StateNotifier<List<Watchlist>> {
     _persist();
   }
 
-  /// Removes a stock symbol from the target watchlist.
   void removeStock(String id, String symbol) {
     state = [
       for (final w in state)
@@ -73,7 +66,6 @@ class WatchlistNotifier extends StateNotifier<List<Watchlist>> {
     _persist();
   }
 
-  /// Reorders stocks within the target watchlist.
   void reorderStocks(String id, int oldIndex, int newIndex) {
     state = [
       for (final w in state)
@@ -99,5 +91,4 @@ final watchlistProvider =
   return WatchlistNotifier(storage);
 });
 
-/// Currently selected watchlist index.
 final selectedWatchlistIndexProvider = StateProvider<int>((ref) => 0);

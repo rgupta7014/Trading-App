@@ -12,7 +12,6 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
 
     final testFeed = MockMarketFeedService();
-    // Keep feed stopped during test so timer doesn't interfere with frame pumps
     testFeed.stop();
 
     await tester.pumpWidget(
@@ -28,28 +27,23 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
 
-    // Verify Watchlist screen is displayed initially
     expect(find.text('Watchlists'), findsOneWidget);
 
-    // Verify bottom navigation items exist
     expect(find.text('Watchlist'), findsOneWidget);
     expect(find.text('Live Market'), findsOneWidget);
     expect(find.text('Trade Ticket'), findsOneWidget);
     expect(find.text('Holdings'), findsOneWidget);
 
-    // Tap Live Market tab
     await tester.tap(find.text('Live Market'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.text('Live Market'), findsWidgets);
 
-    // Tap Holdings tab
     await tester.tap(find.text('Holdings'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.text('Portfolio Holdings'), findsOneWidget);
 
-    // Tap Trade Ticket tab
     await tester.tap(find.text('Trade Ticket'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));

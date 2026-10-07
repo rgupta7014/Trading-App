@@ -6,7 +6,6 @@ import 'package:trading_app/domain/models/holding_model.dart';
 import 'package:trading_app/features/market/providers/market_feed_provider.dart';
 import 'package:trading_app/features/market/widgets/stock_flash_cell.dart';
 
-/// Individual holding item row with granular live price and dynamic P&L calculation.
 class HoldingStockRow extends ConsumerWidget {
   final HoldingModel holding;
   final VoidCallback? onTap;
@@ -19,7 +18,6 @@ class HoldingStockRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Listens strictly to its own symbol price ticks
     final quote = ref.watch(stockQuoteFamily(holding.symbol));
 
     final int ltpPaise = quote.currentPricePaise;
@@ -42,7 +40,6 @@ class HoldingStockRow extends ConsumerWidget {
         ),
         child: Column(
           children: [
-            // Row 1: Symbol & LTP
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -79,11 +76,9 @@ class HoldingStockRow extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 8),
-            // Row 2: Avg Cost, Current Value, and Live P&L
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Avg Cost (using Decimal precision)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -102,7 +97,6 @@ class HoldingStockRow extends ConsumerWidget {
                     ),
                   ],
                 ),
-                // Current Value
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -121,7 +115,6 @@ class HoldingStockRow extends ConsumerWidget {
                     ),
                   ],
                 ),
-                // Live P&L
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [

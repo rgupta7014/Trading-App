@@ -4,7 +4,6 @@ import 'package:trading_app/core/theme/app_theme.dart';
 import 'package:trading_app/features/market/providers/market_feed_provider.dart';
 import 'package:trading_app/features/market/widgets/stock_flash_cell.dart';
 
-/// Highly optimized stock row listening strictly to its own symbol quote.
 class MarketStockRow extends ConsumerWidget {
   final String symbol;
   final VoidCallback? onTap;
@@ -17,7 +16,6 @@ class MarketStockRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Granular rebuild: listens ONLY to this stock quote!
     final quote = ref.watch(stockQuoteFamily(symbol));
 
     return InkWell(
@@ -28,7 +26,6 @@ class MarketStockRow extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
-            // Symbol avatar/badge
             Container(
               width: 44,
               height: 44,
@@ -51,7 +48,6 @@ class MarketStockRow extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 14),
-            // Company name and sector
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +76,6 @@ class MarketStockRow extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 10),
-            // Live price cell with flash effect
             StockFlashCell(quote: quote),
           ],
         ),

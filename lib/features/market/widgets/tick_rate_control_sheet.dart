@@ -4,7 +4,6 @@ import 'package:trading_app/core/constants/stock_constants.dart';
 import 'package:trading_app/core/theme/app_theme.dart';
 import 'package:trading_app/features/market/providers/market_feed_provider.dart';
 
-/// Modal bottom sheet providing granular and stress-test control over the mock feed.
 class TickRateControlSheet extends ConsumerWidget {
   const TickRateControlSheet({super.key});
 
@@ -31,7 +30,6 @@ class TickRateControlSheet extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Drag handle
           Center(
             child: Container(
               width: 36,
@@ -79,7 +77,6 @@ class TickRateControlSheet extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          // Active rate highlight
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -137,7 +134,6 @@ class TickRateControlSheet extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Slider
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: AppColors.primary,
@@ -158,7 +154,6 @@ class TickRateControlSheet extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // Preset Buttons
           Row(
             children: [
               Expanded(

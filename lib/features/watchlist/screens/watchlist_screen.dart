@@ -5,7 +5,6 @@ import 'package:trading_app/features/watchlist/providers/watchlist_provider.dart
 import 'package:trading_app/features/watchlist/widgets/stock_picker_sheet.dart';
 import 'package:trading_app/features/watchlist/widgets/watchlist_stock_row.dart';
 
-/// Screen supporting multiple watchlists, drag reordering, adding/removing stocks.
 class WatchlistScreen extends ConsumerWidget {
   final Function(String symbol)? onStockSelected;
 
@@ -197,7 +196,6 @@ class WatchlistScreen extends ConsumerWidget {
           : null,
       body: Column(
         children: [
-          // Watchlist Selector Tabs / Chips
           Container(
             height: 48,
             margin: const EdgeInsets.symmetric(vertical: 8),
@@ -208,7 +206,6 @@ class WatchlistScreen extends ConsumerWidget {
               separatorBuilder: (_, index) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 if (index == watchlists.length) {
-                  // Button to create a new watchlist
                   return ActionChip(
                     avatar: const Icon(Icons.add, size: 16, color: AppColors.primary),
                     label: const Text(
@@ -249,7 +246,6 @@ class WatchlistScreen extends ConsumerWidget {
             ),
           ),
           const Divider(height: 1, thickness: 0.8, color: AppColors.darkCardBorder),
-          // Content: Reorderable Stock List or Empty State
           Expanded(
             child: activeWatchlist == null || activeWatchlist.symbols.isEmpty
                 ? _buildEmptyState(context, activeWatchlist)
@@ -265,7 +261,6 @@ class WatchlistScreen extends ConsumerWidget {
                     },
                     itemBuilder: (context, index) {
                       final symbol = activeWatchlist.symbols[index];
-                      // CRITICAL: ValueKey(symbol) guarantees correct element binding across reordering
                       return WatchlistStockRow(
                         key: ValueKey(symbol),
                         symbol: symbol,

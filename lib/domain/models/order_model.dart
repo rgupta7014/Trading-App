@@ -2,16 +2,13 @@ import 'package:uuid/uuid.dart';
 
 enum OrderSide { buy, sell }
 
-/// Represents an executed market order.
-///
-/// All monetary values are strictly stored in integer paise.
 class OrderModel {
   final String id;
   final String symbol;
   final OrderSide side;
-  final int quantity; // Positive integer
-  final int pricePaise; // LTP at moment of submission
-  final int totalValuePaise; // quantity * pricePaise
+  final int quantity;
+  final int pricePaise;
+  final int totalValuePaise;
   final DateTime timestamp;
 
   OrderModel({

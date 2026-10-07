@@ -10,7 +10,6 @@ import 'package:trading_app/features/market/widgets/stock_flash_cell.dart';
 import 'package:trading_app/features/ticket/providers/portfolio_provider.dart';
 import 'package:trading_app/features/ticket/widgets/order_confirmation_dialog.dart';
 
-/// Screen/sheet for placing live simulated BUY and SELL market orders.
 class BuySellTicketScreen extends ConsumerStatefulWidget {
   final String initialSymbol;
   final OrderSide initialSide;
@@ -72,20 +71,16 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Live price quote for the selected stock
     final quote = ref.watch(stockQuoteFamily(_selectedSymbol));
 
-    // 2. Portfolio state (wallet & holdings)
     final walletBalance = ref.watch(walletBalanceProvider);
     final portfolioNotifier = ref.read(portfolioProvider.notifier);
     final quantityHeld = portfolioNotifier.getQuantityHeld(_selectedSymbol);
 
-    // 3. Calculation & Validation
     final int ltpPaise = quote.currentPricePaise;
     final int projectedOrderValuePaise = _quantity > 0 ? _quantity * ltpPaise : 0;
     final bool isBuy = _side == OrderSide.buy;
 
-    // Inline validation error detection
     String? validationError;
     if (_quantity <= 0) {
       validationError = 'Quantity must be a positive whole number';
@@ -96,7 +91,6 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
             'Insufficient balance. Need ${CurrencyFormatter.formatPaise(shortBy)} more';
       }
     } else {
-      // Sell validation
       if (quantityHeld <= 0) {
         validationError = 'You do not own any shares of $_selectedSymbol to sell';
       } else if (_quantity > quantityHeld) {
@@ -112,7 +106,6 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
       appBar: AppBar(
         title: const Text('Order Ticket'),
         actions: [
-          // Wallet Balance Header Pill
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -144,7 +137,6 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Stock Selector & Live LTP Card
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -157,7 +149,6 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Stock Dropdown Picker
                       Expanded(
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
@@ -205,14 +196,12 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      // Live Flash Cell for LTP
                       StockFlashCell(quote: quote),
                     ],
                   ),
                   const SizedBox(height: 12),
                   const Divider(height: 1, color: AppColors.darkCardBorder),
                   const SizedBox(height: 12),
-                  // Current Holding Status
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -234,7 +223,6 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Buy / Sell Mode Toggle
             Container(
               decoration: BoxDecoration(
                 color: AppColors.darkCard,
@@ -291,7 +279,6 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            // Quantity Input Field
             const Text(
               'Quantity (Shares)',
               style: TextStyle(
@@ -321,7 +308,6 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
               onChanged: _onQtyChanged,
             ),
             const SizedBox(height: 12),
-            // Quick Quantity Chips
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -372,7 +358,6 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
               ],
             ),
             const SizedBox(height: 24),
-            // Order Summary & Real-time Value Calculation
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -409,14 +394,12 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
               ),
             ),
             const SizedBox(height: 28),
-            // Submit Button
             SizedBox(
               width: double.infinity,
               height: 52,
               child: ElevatedButton(
                 onPressed: canSubmit
                     ? () {
-                        // Submit order at the current LTP
                         final currentQuote =
                             ref.read(marketFeedServiceProvider).getQuote(_selectedSymbol);
                         final result = ref
