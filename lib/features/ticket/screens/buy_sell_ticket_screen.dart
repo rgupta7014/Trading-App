@@ -14,12 +14,16 @@ class BuySellTicketScreen extends ConsumerStatefulWidget {
   final String initialSymbol;
   final OrderSide initialSide;
   final VoidCallback? onNavigateToHoldings;
+  final VoidCallback? onBackToWatchlist;
+  final bool isModalRoute;
 
   const BuySellTicketScreen({
     super.key,
     this.initialSymbol = 'RELIANCE',
     this.initialSide = OrderSide.buy,
     this.onNavigateToHoldings,
+    this.onBackToWatchlist,
+    this.isModalRoute = false,
   });
 
   @override
@@ -104,6 +108,17 @@ class _BuySellTicketScreenState extends ConsumerState<BuySellTicketScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: widget.isModalRoute || Navigator.canPop(context)
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                onPressed: () => Navigator.maybePop(context),
+              )
+            : (widget.onBackToWatchlist != null
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_back_rounded),
+                    onPressed: widget.onBackToWatchlist,
+                  )
+                : null),
         title: const Text('Order Ticket'),
         actions: [
           Container(

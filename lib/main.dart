@@ -57,89 +57,148 @@ class MainNavigationShell extends StatefulWidget {
 
 class _MainNavigationShellState extends State<MainNavigationShell> {
   int _currentIndex = 0;
+  final List<int> _tabHistory = [0];
+  DateTime? _lastBackPressTime;
   String _selectedStockForTicket = 'RELIANCE';
   OrderSide _selectedSideForTicket = OrderSide.buy;
 
-  void _openTicket(String symbol, {OrderSide side = OrderSide.buy}) {
+  void _selectTab(int index) {
+    if (_currentIndex != index) {
+      setState(() {
+        _currentIndex = index;
+        _tabHistory.add(index);
+      });
+    }
+  }
+
+  void _openTicketFromRow(String symbol, {OrderSide side = OrderSide.buy}) {
     setState(() {
       _selectedStockForTicket = symbol;
       _selectedSideForTicket = side;
-      _currentIndex = 2; 
     });
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BuySellTicketScreen(
+          initialSymbol: symbol,
+          initialSide: side,
+          isModalRoute: true,
+          onNavigateToHoldings: () {
+            Navigator.of(context).pop();
+            _selectTab(3);
+          },
+        ),
+      ),
+    );
   }
 
   void _navigateToHoldings() {
-    setState(() {
-      _currentIndex = 3; 
-    });
+    _selectTab(3);
   }
 
   void _navigateToMarket() {
-    setState(() {
-      _currentIndex = 1; 
-    });
+    _selectTab(1);
+  }
+
+  void _navigateToWatchlist() {
+    _selectTab(0);
   }
 
   @override
   Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: [
-         
-          WatchlistScreen(
-            onStockSelected: (sym) => _openTicket(sym),
-          ),
-         
-          MarketOverviewScreen(
-            onStockSelected: (sym) => _openTicket(sym),
-          ),
+        if (_tabHistory.length > 1) {
+          setState(() {
+            _tabHistory.removeLast();
+            _currentIndex = _tabHistory.last;
+          });
+          return;
+        }
 
-          BuySellTicketScreen(
-            key: ValueKey('$_selectedStockForTicket-$_selectedSideForTicket'),
-            initialSymbol: _selectedStockForTicket,
-            initialSide: _selectedSideForTicket,
-            onNavigateToHoldings: _navigateToHoldings,
-          ),
-         
-          HoldingsScreen(
-            onStockSelected: (sym) => _openTicket(sym),
-            onExploreMarket: _navigateToMarket,
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(color: AppColors.darkCardBorder, width: 0.8),
-          ),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt_rounded),
-              activeIcon: Icon(Icons.list_alt_rounded, color: AppColors.primary),
-              label: 'Watchlist',
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+            _tabHistory.clear();
+            _tabHistory.add(0);
+          });
+          return;
+        }
+
+        final now = DateTime.now();
+        if (_lastBackPressTime == null ||
+            now.difference(_lastBackPressTime!) > const Duration(seconds: 2)) {
+          _lastBackPressTime = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Press back again to exit'),
+              duration: Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.candlestick_chart_rounded),
-              activeIcon: Icon(Icons.candlestick_chart_rounded, color: AppColors.accent),
-              label: 'Live Market',
+          );
+          return;
+        }
+
+        SystemNavigator.pop();
+      },
+      child: Scaffold(
+        body: IndexedStack(
+          index: _currentIndex,
+          children: [
+            WatchlistScreen(
+              onStockSelected: (sym) => _openTicketFromRow(sym),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.swap_horiz_rounded),
-              activeIcon: Icon(Icons.swap_horiz_rounded, color: AppColors.bullish),
-              label: 'Trade Ticket',
+            MarketOverviewScreen(
+              onStockSelected: (sym) => _openTicketFromRow(sym),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.pie_chart_outline_rounded),
-              activeIcon: Icon(Icons.pie_chart_rounded, color: AppColors.primary),
-              label: 'Holdings',
+            BuySellTicketScreen(
+              key: ValueKey('$_selectedStockForTicket-$_selectedSideForTicket'),
+              initialSymbol: _selectedStockForTicket,
+              initialSide: _selectedSideForTicket,
+              onNavigateToHoldings: _navigateToHoldings,
+              onBackToWatchlist: _navigateToWatchlist,
+            ),
+            HoldingsScreen(
+              onStockSelected: (sym) => _openTicketFromRow(sym),
+              onExploreMarket: _navigateToMarket,
             ),
           ],
+        ),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppColors.darkCardBorder, width: 0.8),
+            ),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: _selectTab,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list_alt_rounded),
+                activeIcon: Icon(Icons.list_alt_rounded, color: AppColors.primary),
+                label: 'Watchlist',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.candlestick_chart_rounded),
+                activeIcon: Icon(Icons.candlestick_chart_rounded, color: AppColors.accent),
+                label: 'Live Market',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.swap_horiz_rounded),
+                activeIcon: Icon(Icons.swap_horiz_rounded, color: AppColors.bullish),
+                label: 'Trade Ticket',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.pie_chart_outline_rounded),
+                activeIcon: Icon(Icons.pie_chart_rounded, color: AppColors.primary),
+                label: 'Holdings',
+              ),
+            ],
+          ),
         ),
       ),
     );
